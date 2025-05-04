@@ -39,3 +39,8 @@ pip install -r requirements.txt
 ```bash
 python temperature_logger.py --readings 10 --delay 1 --predict 5
 ```
+## Example Output
+
+Below is an example output from running the script with 10 simulated temperature readings and 5 predicted future values:
+
+![Example Output](temperature_plot_with_predictions.png)
