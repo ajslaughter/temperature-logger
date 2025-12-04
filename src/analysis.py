@@ -1,17 +1,27 @@
-from sklearn.linear_model import LinearRegression
 import numpy as np
+from sklearn.linear_model import LinearRegression
+from typing import List
+import logging
 
-class TemperatureAnalyzer:
-    def predict_next_readings(self, temperatures: list, num_predictions: int = 5) -> list:
-        """Train linear regression and predict next values."""
-        if not temperatures:
-            return []
+logger = logging.getLogger(__name__)
 
-        X = np.array(range(len(temperatures))).reshape(-1, 1)
-        y = np.array(temperatures)
-        model = LinearRegression()
-        model.fit(X, y)
+class Forecaster:
+    def __init__(self):
+        self.model = LinearRegression()
 
-        X_future = np.array(range(len(temperatures), len(temperatures) + num_predictions)).reshape(-1, 1)
-        predictions = model.predict(X_future)
-        return predictions.tolist()
+    def predict_next(self, history: List[float], num_predictions: int) -> np.ndarray:
+        if not history:
+            logger.warning("No history provided for prediction.")
+            return np.array([])
+
+        X = np.array(range(len(history))).reshape(-1, 1)
+        y = np.array(history)
+        
+        self.model.fit(X, y)
+        
+        # Predict future steps
+        X_future = np.array(range(len(history), len(history) + num_predictions)).reshape(-1, 1)
+        predictions = self.model.predict(X_future)
+        
+        logger.info(f"Generated {num_predictions} future predictions.")
+        return predictions

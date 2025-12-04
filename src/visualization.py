@@ -1,25 +1,35 @@
 import matplotlib.pyplot as plt
+import numpy as np
+from typing import List
 import logging
 
 logger = logging.getLogger(__name__)
 
-class TemperaturePlotter:
-    def plot_readings(self, temperatures: list, predictions: list, output_file: str):
-        """Plot actual and predicted readings."""
-        try:
-            plt.figure() # Create a new figure to avoid overlapping if called multiple times
-            plt.plot(temperatures, marker='o', label='Actual')
-            plt.plot(range(len(temperatures), len(temperatures) + len(predictions)), predictions, 'r--', label='Predicted')
+class Plotter:
+    @staticmethod
+    def create_plot(temperatures: List[float], predictions: np.ndarray, output_file: str, show_plot: bool = False):
+        plt.figure(figsize=(10, 6))
+        
+        # Plot History
+        plt.plot(temperatures, marker='o', label='Actual Data')
+        
+        # Plot Forecast
+        future_x = range(len(temperatures), len(temperatures) + len(predictions))
+        plt.plot(future_x, predictions, 'r--', label='AI Forecast')
 
-            plt.title("Simulated Temperature Readings with ML Forecast")
-            plt.xlabel("Reading #")
-            plt.ylabel("Temperature (°C)")
-            plt.grid(True)
-            plt.legend()
-            plt.tight_layout()
+        plt.title("Temperature Monitoring & Forecast")
+        plt.xlabel("Reading Index")
+        plt.ylabel("Temperature (°C)")
+        plt.grid(True, linestyle='--', alpha=0.6)
+        plt.legend()
+        plt.tight_layout()
+        
+        try:
             plt.savefig(output_file)
-            # plt.show() # Removed show() as it blocks execution in non-interactive environments
             logger.info(f"Plot saved to {output_file}")
-            plt.close() # Close the figure to free memory
+            if show_plot:
+                plt.show()
         except Exception as e:
-            logger.error(f"Failed to create plot: {e}")
+            logger.error(f"Error generating plot: {e}")
+        finally:
+            plt.close()
