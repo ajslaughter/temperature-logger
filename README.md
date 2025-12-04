@@ -1,46 +1,32 @@
-# Temperature Logger with Machine Learning Forecast
+# Enterprise Temperature Logger
 
-This Python project simulates a temperature sensor, logs real-time data, visualizes temperature trends, and applies linear regression to forecast future readings. It demonstrates skills in automation, time-series analysis, and basic machine learning — ideal for applications in agriculture, environmental monitoring, or sensor-based research.
+Professional-grade Python application for temperature monitoring and ML forecasting.
 
-## Features
+## Structure
+- `src/main.py`: Entry point
+- `src/sensor.py`: Hardware abstraction
+- `src/storage.py`: Data persistence
+- `src/analysis.py`: ML Logic
 
-- Simulated temperature readings (20–40°C)  
-- Timestamped logging  
-- CSV export of temperature data  
-- Graph generation with actual + predicted values  
-- Linear regression prediction using `scikit-learn`  
-- Command-line customization via `argparse`  
+## Quick Start
 
-## Requirements
-
-Install the required Python packages with:
-
+### 1. Install
 ```bash
 pip install -r requirements.txt
 ```
 
-## How to Run
-
-1. Download or clone this repository.  
-2. Open a terminal and navigate into the project folder:
-
+### 2. Run (Local)
 ```bash
-cd temperature-logger-main
+python -m src.main --readings 10 --predict 5
 ```
 
-3. Install the required Python packages:
-
+### 3. Run (Docker)
 ```bash
-pip install -r requirements.txt
+docker build -t temperature-logger .
+docker run -v $(pwd)/data:/app/data temperature-logger
 ```
 
-4. Run the script with desired options (example):
-
+### 4. Test
 ```bash
-python temperature_logger.py --readings 10 --delay 1 --predict 5
+pytest tests/
 ```
-## Example Output
-
-Below is an example output from running the script with 10 simulated temperature readings and 5 predicted future values:
-
-![Example Output](temperature_plot_with_predictions.png)
